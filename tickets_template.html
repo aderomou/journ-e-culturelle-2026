@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tickets Journée Culturelle</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto&display=swap" rel="stylesheet">
+<script src="generate_tickets.js"></script>
+<style>
+body { background:#f0f0f0; font-family:'Roboto', sans-serif; }
+.ticket {
+  width: 450px; margin:40px auto; padding:20px;
+  border-radius:25px; background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color:white; box-shadow:0 15px 30px rgba(0,0,0,0.5); page-break-after: always;
+}
+.ticket h1 { font-family:'Montserrat', sans-serif; text-align:center; font-size:28px; margin:5px 0; }
+.ticket h2 { text-align:center; font-size:22px; margin:5px 0; letter-spacing:1px; }
+.ticket h3 { text-align:center; font-size:16px; margin:5px 0 15px; font-weight:normal; }
+.codes {
+  display:flex; justify-content:space-around; margin:20px 0;
+  padding:10px; background: rgba(255,255,255,0.15); border-radius:15px;
+  font-weight:bold; font-size:18px;
+}
+.qr { display:flex; justify-content:space-around; margin-top:15px; }
+.qr img { width:80px; height:80px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.3); }
+</style>
+</head>
+<body>
+
+<div id="tickets-container"></div>
+
+<script>
+// Affichage de tous les tickets
+const container = document.getElementById("tickets-container");
+
+tickets.forEach(t=>{
+  let div = document.createElement("div");
+  div.className = "ticket";
+  div.innerHTML = `
+    <h1>HTC-CETIP</h1>
+    <h2>JOURNÉE CULTURELLE 2026</h2>
+    <h3>Du 30 mars au 1er avril</h3>
+    
+    <div class="codes">
+      <div style="color:#ffd700;">J1: ${t.codes.J1}</div>
+      <div style="color:#ff8c00;">J2: ${t.codes.J2}</div>
+      <div style="color:#00ffff;">J3: ${t.codes.J3}</div>
+    </div>
+    
+    <div class="qr">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${t.codes.J1}" alt="QR J1">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${t.codes.J2}" alt="QR J2">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${t.codes.J3}" alt="QR J3">
+    </div>
+  `;
+  container.appendChild(div);
+});
+</script>
+
+</body>
+</html>
