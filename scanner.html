@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Scanner Journée Culturelle</title>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script src="generate_tickets.js"></script>
+<style>
+body{font-family:Arial;text-align:center;background:#111;color:white;}
+.scanner-container {
+  width: 350px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  text-align: center;
+  color: white;
+}
+#reader {
+  margin: 20px auto;
+  border: 5px solid white;
+  border-radius: 15px;
+  width: 300px;
+  height: 300px;
+}
+.result-box {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.result-valid { background: limegreen; color: white; }
+.result-invalid { background: red; color: white; }
+</style>
+</head>
+<body>
+
+<div class="scanner-container">
+  <h2>Scanner Journée Culturelle 2026</h2>
+  <p>Placez le QR code dans le cadre ci-dessous</p>
+  <div id="reader"></div>
+  <div id="result" class="result-box"></div>
+</div>
+
+<script>
+let resultDiv = document.getElementById("result");
+
+function onScanSuccess(code){
+  let found=false;
+  tickets.forEach(t=>{
+    for(let day in t.codes){
+      if(t.codes[day]===code){
+        found=true;
+        if(!t.used[day]){
+          t.used[day]=true;
+          resultDiv.className='result-box result-valid';
+          resultDiv.innerHTML=`✅ Code valide : ${code} (Jour ${day.substring(1)})`;
+        }else{
+          resultDiv.className='result-box result-invalid';
+          resultDiv.innerHTML=`❌ Déjà utilisé : ${code} (Jour ${day.substring(1)})`;
+        }
+      }
+    }
+  });
+  if(!found){
+    resultDiv.className='result-box result-invalid';
+    resultDiv.innerHTML=`❌ Code inconnu : ${code}`;
+  }
+}
+
+let scanner = new Html5QrcodeScanner("reader",{fps:10,qrbox:250});
+scanner.render(onScanSuccess);
+</script>
+
+</body>
+</html>
